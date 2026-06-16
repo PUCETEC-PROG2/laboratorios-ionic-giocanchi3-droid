@@ -1,5 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import { IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+
 import './Tab3.css';
 
 const Tab3: React.FC = () => {
@@ -16,7 +16,18 @@ const Tab3: React.FC = () => {
             <IonTitle size="large">Tab 3</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 3 page" />
+        <div className="card-contntainer">
+          <IonCard className= "card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPhXgkIQ6IU8Y_Cy5vCI5hRshD3ulY_5OMKdphpz1eMfy9GyF83wh3LwV_&s=10" alt= "Avatar"/>
+            <IonHeader>
+              <IonCardTitle>Giovanny Canchi</IonCardTitle>
+              <IonCardSubtitle>giovannycanchi</IonCardSubtitle>
+              <IonCardContent>
+                <p>Dessarrolador de software junior</p>
+              </IonCardContent>
+            </IonHeader>
+          </IonCard>
+        </div>
       </IonContent>
     </IonPage>
   );
