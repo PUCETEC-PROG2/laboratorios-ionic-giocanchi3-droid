@@ -1,52 +1,57 @@
-import { IonContent, IonHeader, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonPage, IonThumbnail, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonList, IonPage, IonText, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import './Tab1.css';
-import { pencil, trash } from 'ionicons/icons';
-import { repositoryList } from '../interfaces/Repository';
+import { fetchRepositories } from '../services/GithubService';
 import RepoItem from '../components/RepoItem';
+import React from 'react';
+import { Repository } from '../interfaces/Repository';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Tab1: React.FC = () => {
+  const [repositoryList, setRepositoryList] = React.useState<Repository[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = React.useState("");
+
+  const loadRepos = async () => {
+    setLoading(true);
+    fetchRepositories().then((reposData) => {
+      setRepositoryList(reposData);
+    }).catch((error) => {
+      console.log("Error al cargar repositorios", error);
+      setErrorMsg("Error al cargar repositorios: " + error);
+    }).finally(() => {
+      setLoading(false);
+    });
+  };
+
+  useIonViewWillEnter(() => {
+    loadRepos();
+  });
+
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar slot='bottom'>
           <IonTitle>Repositorios</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen className="ion-padding">
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Repositorios</IonTitle>
           </IonToolbar>
         </IonHeader>
-
         <IonList>
-          {repositoryList.map((repo) =>(
-            <RepoItem {...repo}/>
-          ))}
+          {repositoryList.map((repo)=> (
+            <RepoItem {...repo} key={repo.id}/>
+          )
+          )}
         </IonList>
-
-        <IonList>
-          <IonItemSliding>
-            <IonItem>
-            <IonThumbnail>
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPhXgkIQ6IU8Y_Cy5vCI5hRshD3ulY_5OMKdphpz1eMfy9GyF83wh3LwV_&s=10" alt= "Repositorio 1"/>
-            </IonThumbnail>
-            <IonLabel>
-              <h3>Repositorio 1</h3>
-              <p>Descripción del repositorio 1</p>
-              <p><strong>Lenguaje:</strong> Kotlin</p>
-            </IonLabel>
-            </IonItem>
-            <IonItemOptions>
-              <IonItemOption>
-                <IonIcon icon= {pencil} slot="icon-only"/>
-              </IonItemOption>
-              <IonItemOption color="danger">
-                <IonIcon icon= {trash} slot="icon-only"/>
-              </IonItemOption>
-            </IonItemOptions>
-          </IonItemSliding>
-        </IonList>
+        {loading && <LoadingSpinner />}
+        {errorMsg !== "" && (
+          (<IonText color="danger">
+            <p>{errorMsg}</p>
+          </IonText>)
+        )}
       </IonContent>
     </IonPage>
   );
