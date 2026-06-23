@@ -23,7 +23,7 @@ const Tab3: React.FC = () => {
               <IonCardTitle>Giovanny Canchi</IonCardTitle>
               <IonCardSubtitle>giovannycanchi</IonCardSubtitle>
               <IonCardContent>
-                <p>Dessarrolador de software junior</p>
+                <p>Desarrollador de software junior</p>
               </IonCardContent>
             </IonHeader>
           </IonCard>
